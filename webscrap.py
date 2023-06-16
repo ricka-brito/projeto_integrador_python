@@ -17,7 +17,7 @@ class scrap:
         self.navegador = webdriver.Chrome(service=self.servico, options=self.options)
         time.sleep(5)
         self.navegador.get("https://projetosemds.com.br/hbrito/produtos.html")
-        infos = {"nome": [], "preco": [], "img": []}
+        infos = {"nome": [], "preco": [], "tipo": []}
         dir = './imgs'
         os.mkdir(dir)
         for i in range(1, 100):
@@ -30,7 +30,19 @@ class scrap:
                 self.navegador.get("https://projetosemds.com.br/hbrito/produtos.html")
                 infos["nome"].append(nome)
                 infos["preco"].append(float(preco.replace("R$", "").replace(",", ".").strip()))
-                infos["img"].append(f"./imgs/{nome}.png")
+                if "VASO" in nome.upper():
+                    infos["tipo"].append("vaso")
+                elif "ESTATUA" in nome.upper():
+                    infos["tipo"].append("estatua")
+                elif "BALAUSTRE" in nome.upper():
+                    infos["tipo"].append("balaustre")
+                elif "BANCO" in nome.upper():
+                    infos["tipo"].append("banco")
+                elif "COBOGO" in nome.upper():
+                    infos["tipo"].append("cobogo")
+                else:
+                    infos["tipo"].append("diversos")
+
                 time.sleep(0.2)
             except:
                 df = pd.DataFrame(infos)
